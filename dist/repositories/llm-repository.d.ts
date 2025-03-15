@@ -1,4 +1,3 @@
-import OpenAI from "openai";
 interface LLMOptions {
     role: "system" | "user" | "assistant";
     content: string;
@@ -25,7 +24,6 @@ export declare class LLMRepository {
         openai?: string;
         perplexity?: string;
     };
-    openai: OpenAI;
     constructor(apiKeys: {
         openai?: string;
         perplexity?: string;
@@ -35,7 +33,6 @@ export declare class LLMRepository {
         message: string;
         citations: string[];
     }>;
-    generateVisionResponse(messages: never[], format: "json_object" | "text"): Promise<string>;
     generateEmbedding(input: string): Promise<number[]>;
 }
 export {};

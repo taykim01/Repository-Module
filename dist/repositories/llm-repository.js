@@ -1,22 +1,28 @@
-import OpenAI from "openai";
 export class LLMRepository {
     apiKeys;
-    openai;
     constructor(apiKeys) {
         this.apiKeys = apiKeys;
-        this.openai = new OpenAI({
-            apiKey: this.apiKeys.openai,
-        });
     }
     async generateResponse(messages, format) {
-        const chatCompletion = await this.openai.chat.completions.create({
-            model: "gpt-4-turbo",
-            messages: messages,
-            response_format: { type: format },
+        const res = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${this.apiKeys.openai}`,
+            },
+            body: JSON.stringify({
+                model: "gpt-4-turbo",
+                messages: messages,
+                response_format: { type: format },
+            }),
         });
-        const response = chatCompletion.choices[0].message.content;
+        if (!res.ok) {
+            throw new Error(`OpenAI API returned an error: ${res.statusText}`);
+        }
+        const data = await res.json();
+        const response = data.choices[0].message.content;
         if (!response)
-            throw new Error();
+            throw new Error("No response from OpenAI");
         return response;
     }
     async generateSearchResponse(options) {
@@ -34,24 +40,24 @@ export class LLMRepository {
         const message = data.choices[0].message.content;
         return { message, citations };
     }
-    async generateVisionResponse(messages, format) {
-        const chatCompletion = await this.openai.chat.completions.create({
-            model: "gpt-4o",
-            messages: messages,
-            response_format: { type: format },
-        });
-        const response = chatCompletion.choices[0].message.content;
-        if (!response)
-            throw new Error();
-        return response;
-    }
     async generateEmbedding(input) {
-        const embedding = await this.openai.embeddings.create({
-            model: "text-embedding-3-large",
-            input,
-            encoding_format: "float",
+        const res = await fetch("https://api.openai.com/v1/embeddings", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${this.apiKeys.openai}`,
+            },
+            body: JSON.stringify({
+                model: "text-embedding-3-large",
+                input: input,
+                encoding_format: "float",
+            }),
         });
-        const vector = embedding.data[0].embedding;
+        if (!res.ok) {
+            throw new Error(`OpenAI API error: ${res.statusText}`);
+        }
+        const data = await res.json();
+        const vector = data.data[0].embedding;
         return vector;
     }
 }
