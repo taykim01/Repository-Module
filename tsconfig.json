@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": false,
     "outDir": "dist",
     "module": "ESNext",
     "moduleResolution": "Node",
-    "target": "ES6",
-    "declaration": true,
-    "sourceMap": true
+    "target": "ESNext",
+    "strict": true,
+    "allowJs": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

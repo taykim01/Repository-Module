@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs";
+import { ChatCompletionMessageParam } from "openai/resources/chat";
 
 interface PerplexityOptions {
   model: string;
