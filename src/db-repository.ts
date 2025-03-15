@@ -1,4 +1,4 @@
-import { createClient } from "../infrastructures/supabase.ts";
+import { createClient } from "@supabase/supabase-js";
 
 export class DBRepository<Entity> {
   constructor(
@@ -8,7 +8,7 @@ export class DBRepository<Entity> {
   ) {}
 
   async create(requestData: Partial<Entity>): Promise<string> {
-    const serverClient = await createClient(this.url, this.apiKey);
+    const serverClient = createClient(this.url, this.apiKey);
     const { data, error } = await serverClient
       .from(this.table)
       .insert(requestData)
@@ -22,7 +22,7 @@ export class DBRepository<Entity> {
     query: Record<K, Entity[K]>,
     selector?: (keyof Entity)[]
   ): Promise<Entity> {
-    const serverClient = await createClient(this.url, this.apiKey);
+    const serverClient = createClient(this.url, this.apiKey);
     const selectorArray = selector ? selector.join(", ") : "*";
     let querySnapshot = serverClient.from(this.table).select(selectorArray);
     for (const key in query) {
@@ -37,7 +37,7 @@ export class DBRepository<Entity> {
     query: Record<K, Entity[K]>,
     selector?: (keyof Entity)[]
   ): Promise<Entity[]> {
-    const serverClient = await createClient(this.url, this.apiKey);
+    const serverClient = createClient(this.url, this.apiKey);
     const selectorArray = selector ? selector.join(", ") : "*";
     let querySnapshot = serverClient.from(this.table).select(selectorArray);
     for (const key in query) {
@@ -52,7 +52,7 @@ export class DBRepository<Entity> {
     query: Record<K, Entity[K]>,
     selector: K[]
   ): Promise<Entity[]> {
-    const serverClient = await createClient(this.url, this.apiKey);
+    const serverClient = createClient(this.url, this.apiKey);
     const selectorArray = selector.join(", ");
 
     let querySnapshot = serverClient.from(this.table).select(selectorArray);
@@ -68,7 +68,7 @@ export class DBRepository<Entity> {
     query: string,
     selector?: K[]
   ): Promise<Entity[]> {
-    const serverClient = await createClient(this.url, this.apiKey);
+    const serverClient = createClient(this.url, this.apiKey);
     const selectorArray = selector ? selector.join(", ") : "*";
 
     const { data, error } = await serverClient
@@ -81,7 +81,7 @@ export class DBRepository<Entity> {
   }
 
   async update(id: string, requestData: Partial<Entity>) {
-    const serverClient = await createClient(this.url, this.apiKey);
+    const serverClient = createClient(this.url, this.apiKey);
     const { error } = await serverClient
       .from(this.table)
       .update(requestData)
@@ -91,7 +91,7 @@ export class DBRepository<Entity> {
   }
 
   async deleteByID(id: string): Promise<void> {
-    const serverClient = await createClient(this.url, this.apiKey);
+    const serverClient = createClient(this.url, this.apiKey);
     const { error } = await serverClient.from(this.table).delete().eq("id", id);
     if (error) throw new Error(error.message);
   }
@@ -99,7 +99,7 @@ export class DBRepository<Entity> {
   async deleteAll<K extends keyof Entity>(
     query: Record<K, Entity[K]>
   ): Promise<void> {
-    const serverClient = await createClient(this.url, this.apiKey);
+    const serverClient = createClient(this.url, this.apiKey);
     let querySnapshot = serverClient.from(this.table).delete();
     for (const key in query) {
       querySnapshot = querySnapshot.eq(key as string, query[key]);
@@ -111,7 +111,7 @@ export class DBRepository<Entity> {
   async count<K extends keyof Entity>(
     query: Record<K, Entity[K]>
   ): Promise<number> {
-    const serverClient = await createClient(this.url, this.apiKey);
+    const serverClient = createClient(this.url, this.apiKey);
     let querySnapshot = serverClient.from(this.table).select("id");
     for (const key in query) {
       querySnapshot = querySnapshot.eq(key as string, query[key]);

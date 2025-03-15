@@ -1,4 +1,5 @@
-import { createClient } from "../infrastructures/supabase.ts";
+import { createClient } from "@supabase/supabase-js";
+import { Buffer } from "node:buffer";
 
 export class StorageRepository {
   constructor(
@@ -19,7 +20,7 @@ export class StorageRepository {
   }
 
   async uploadBase64(base64: string, filePath: string) {
-    const supabase = await createClient(this.url, this.apiKey);
+    const supabase = createClient(this.url, this.apiKey);
     const stoargeRef = supabase.storage.from(this.bucketName);
     const buffer = Buffer.from(base64, "base64");
     const { error } = await stoargeRef.upload(filePath, buffer, {
