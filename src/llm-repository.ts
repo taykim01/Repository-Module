@@ -58,32 +58,27 @@ export class LLMRepository {
     model: string,
     maxTokens: number
   ): Promise<{ message: string; citations: string[] }> {
-    return {
-      messages,
-      model,
-      maxTokens,
+    const payload = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.apiKeys.perplexity}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        messages,
+        max_tokens: maxTokens,
+      }),
     };
-    // const payload = {
-    //   method: "POST",
-    //   headers: {
-    //     Authorization: `Bearer ${this.apiKeys.perplexity}`,
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     model,
-    //     messages,
-    //     max_tokens: maxTokens,
-    //   }),
-    // };
-    // const res = await fetch(
-    //   "https://api.perplexity.ai/chat/completions",
-    //   payload
-    // );
-    // const data = await res.json();
+    const res = await fetch(
+      "https://api.perplexity.ai/chat/completions",
+      payload
+    );
+    const data = await res.json();
 
-    // const citations = data.citations ?? [];
-    // const message = data.choices[0].message.content;
-    // return { message, citations };
+    const citations = data.citations ?? [];
+    const message = data.choices[0].message.content;
+    return { message, citations };
   }
 
   async generateEmbedding(input: string): Promise<number[]> {
