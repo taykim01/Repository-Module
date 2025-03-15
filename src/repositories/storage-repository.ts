@@ -1,6 +1,6 @@
 import { createClient } from "../infrastructures/supabase";
 
-export default class StorageRepository {
+export class StorageRepository {
   constructor(
     public bucketName: string,
     public url: string,

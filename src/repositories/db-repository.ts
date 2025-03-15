@@ -1,6 +1,6 @@
 import { createClient } from "../infrastructures/supabase";
 
-export default class DBRepository<Entity> {
+export class DBRepository<Entity> {
   constructor(
     public table: string,
     public url: string,

@@ -18,7 +18,7 @@ interface PerplexityOptions {
   response_format?: null;
 }
 
-export default class LLMRepository {
+export class LLMRepository {
   public openai: OpenAI;
 
   constructor(public apiKeys: { openai?: string; perplexity?: string }) {
