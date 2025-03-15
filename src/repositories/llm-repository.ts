@@ -1,5 +1,3 @@
-import OpenAI from "openai";
-
 interface LLMOptions {
   role: "system" | "user" | "assistant";
   content: string;
@@ -24,26 +22,32 @@ interface PerplexityOptions {
 }
 
 export class LLMRepository {
-  public openai: OpenAI;
-
-  constructor(public apiKeys: { openai?: string; perplexity?: string }) {
-    this.openai = new OpenAI({
-      apiKey: this.apiKeys.openai,
-    });
-  }
+  constructor(public apiKeys: { openai?: string; perplexity?: string }) {}
 
   async generateResponse(
     messages: LLMOptions[],
     format: "json_object" | "text"
   ): Promise<string> {
-    const chatCompletion = await this.openai.chat.completions.create({
-      model: "gpt-4-turbo",
-      messages: messages,
-      response_format: { type: format },
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.apiKeys.openai}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4-turbo",
+        messages: messages,
+        response_format: { type: format },
+      }),
     });
 
-    const response: string = chatCompletion.choices[0].message.content!;
-    if (!response) throw new Error();
+    if (!res.ok) {
+      throw new Error(`OpenAI API returned an error: ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    const response: string = data.choices[0].message.content;
+    if (!response) throw new Error("No response from OpenAI");
 
     return response;
   }
@@ -91,29 +95,26 @@ export class LLMRepository {
     return { message, citations };
   }
 
-  async generateVisionResponse(
-    messages: never[],
-    format: "json_object" | "text"
-  ): Promise<string> {
-    const chatCompletion = await this.openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: messages,
-      response_format: { type: format },
-    });
-
-    const response: string = chatCompletion.choices[0].message.content!;
-    if (!response) throw new Error();
-
-    return response;
-  }
-
   async generateEmbedding(input: string): Promise<number[]> {
-    const embedding = await this.openai.embeddings.create({
-      model: "text-embedding-3-large",
-      input,
-      encoding_format: "float",
+    const res = await fetch("https://api.openai.com/v1/embeddings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.apiKeys.openai}`,
+      },
+      body: JSON.stringify({
+        model: "text-embedding-3-large",
+        input: input,
+        encoding_format: "float",
+      }),
     });
-    const vector = embedding.data[0].embedding;
+
+    if (!res.ok) {
+      throw new Error(`OpenAI API error: ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    const vector: number[] = data.data[0].embedding;
     return vector;
   }
 }
