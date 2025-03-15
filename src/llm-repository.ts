@@ -24,6 +24,30 @@ export interface PerplexityOptions {
 export class LLMRepository {
   constructor(public apiKeys: { openai?: string; perplexity?: string }) {}
 
+  async generateQueryResults(
+    messages: LLMOptions[],
+    model: string,
+    maxTokens: number
+  ): Promise<{ message: string; citations: string[] }> {
+    const res = await fetch("https://api.perplexity.ai/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.apiKeys.perplexity}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        messages,
+        max_tokens: maxTokens,
+      }),
+    });
+    const data = await res.json();
+
+    const citations = data.citations ?? [];
+    const message = data.choices[0].message.content;
+    return { message, citations };
+  }
+
   async generateResponse(
     messages: LLMOptions[],
     format: "json_object" | "text",
@@ -51,28 +75,6 @@ export class LLMRepository {
     if (!response) throw new Error("No response from OpenAI");
 
     return response;
-  }
-
-  async generateQueryResults(
-    messages: LLMOptions[],
-    model: string,
-    maxTokens: number
-  ): Promise<string> {
-    const res = await fetch("https://api.perplexity.ai/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${this.apiKeys.perplexity}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model,
-        messages,
-        max_tokens: maxTokens,
-      }),
-    });
-    const data = await res.json();
-
-    return data.choices[0].message.content;
   }
 
   async generateEmbedding(input: string): Promise<number[]> {
