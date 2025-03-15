@@ -1,5 +1,5 @@
 import { createClient } from "../infrastructures/supabase";
-export default class DBRepository {
+export class DBRepository {
     table;
     url;
     apiKey;

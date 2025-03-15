@@ -1,4 +1,4 @@
-export default class DBRepository<Entity> {
+export declare class DBRepository<Entity> {
     table: string;
     url: string;
     apiKey: string;

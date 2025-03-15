@@ -16,7 +16,7 @@ interface PerplexityOptions {
     frequency_penalty?: number;
     response_format?: null;
 }
-export default class LLMRepository {
+export declare class LLMRepository {
     apiKeys: {
         openai?: string;
         perplexity?: string;

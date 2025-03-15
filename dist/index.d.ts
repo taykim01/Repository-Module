@@ -1,3 +1,3 @@
-export { default as LLMRepository } from "./repositories/llm-repository";
-export { default as DBRepository } from "./repositories/db-repository";
-export { default as StorageRepository } from "./repositories/storage-repository";
+export { LLMRepository } from "./repositories/llm-repository";
+export { DBRepository } from "./repositories/db-repository";
+export { StorageRepository } from "./repositories/storage-repository";

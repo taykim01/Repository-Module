@@ -1,5 +1,5 @@
 import { createClient } from "../infrastructures/supabase";
-export default class StorageRepository {
+export class StorageRepository {
     bucketName;
     url;
     apiKey;

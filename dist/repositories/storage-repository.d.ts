@@ -1,4 +1,4 @@
-export default class StorageRepository {
+export declare class StorageRepository {
     bucketName: string;
     url: string;
     apiKey: string;

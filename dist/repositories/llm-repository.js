@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-export default class LLMRepository {
+export class LLMRepository {
     apiKeys;
     openai;
     constructor(apiKeys) {
