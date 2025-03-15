@@ -79,7 +79,6 @@ export class LLMRepository {
         response_format: options.response_format ?? null,
       }),
     };
-
     const res = await fetch(
       "https://api.perplexity.ai/chat/completions",
       payload
