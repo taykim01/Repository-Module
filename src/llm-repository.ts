@@ -86,7 +86,6 @@ export class LLMRepository {
     const data = await res.json();
     const citations = data.citations;
     const message = data.choices[0].message.content;
-
     return { message, citations };
   }
 
