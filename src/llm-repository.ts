@@ -83,8 +83,8 @@ export class LLMRepository {
       "https://api.perplexity.ai/chat/completions",
       payload
     );
-    const data = await res.json();
-    return data;
+    return res;
+    // const data = await res.json();
     // const citations = data.citations;
     // const message = data.choices[0].message.content;
 
