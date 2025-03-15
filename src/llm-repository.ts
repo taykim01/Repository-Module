@@ -84,9 +84,20 @@ export class LLMRepository {
       payload
     );
     const data = await res.json();
-    const citations = data.citations;
-    const message = data.choices[0].message.content;
 
+    // Added check for choices array
+    if (!data.choices || data.choices.length === 0) {
+      console.error(
+        "LLMRepository.generateSearchResponse: Invalid API response",
+        data
+      );
+      throw new Error(
+        "Invalid API response: choices array is missing or empty."
+      );
+    }
+
+    const citations = data.citations ?? [];
+    const message = data.choices[0].message.content;
     return { message, citations };
   }
 
