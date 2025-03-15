@@ -1,9 +1,14 @@
 import OpenAI from "openai";
-import { ChatCompletionMessageParam } from "openai/resources/chat";
+
+interface LLMOptions {
+  role: "system" | "user" | "assistant";
+  content: string;
+  name?: string;
+}
 
 interface PerplexityOptions {
   model: string;
-  messages: ChatCompletionMessageParam[];
+  messages: LLMOptions[];
   max_tokens?: number;
   temperature?: number;
   top_p?: number;
@@ -28,7 +33,7 @@ export class LLMRepository {
   }
 
   async generateResponse(
-    messages: ChatCompletionMessageParam[],
+    messages: LLMOptions[],
     format: "json_object" | "text"
   ): Promise<string> {
     const chatCompletion = await this.openai.chat.completions.create({
