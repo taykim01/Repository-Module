@@ -1,10 +1,10 @@
-interface LLMOptions {
+export interface LLMOptions {
   role: "system" | "user" | "assistant";
   content: string;
   name?: string;
 }
 
-interface PerplexityOptions {
+export interface PerplexityOptions {
   model: string;
   messages: LLMOptions[];
   max_tokens?: number;
