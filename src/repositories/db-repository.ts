@@ -1,4 +1,4 @@
-import { createClient } from "../infrastructures/supabase";
+import { createClient } from "../infrastructures/supabase.ts";
 
 export class DBRepository<Entity> {
   constructor(
