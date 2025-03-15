@@ -56,6 +56,9 @@ export class LLMRepository {
   async generateSearchResponse(
     options: PerplexityOptions
   ): Promise<{ message: string; citations: string[] }> {
+    console.log("🛠 Running from:", import.meta.url);
+    console.log("🛠 API Key:", this.apiKeys.perplexity ? "Loaded" : "Missing");
+
     const payload = {
       method: "POST",
       headers: {
