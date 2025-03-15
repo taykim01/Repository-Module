@@ -26,7 +26,8 @@ export class LLMRepository {
 
   async generateResponse(
     messages: LLMOptions[],
-    format: "json_object" | "text"
+    format: "json_object" | "text",
+    model: string
   ): Promise<string> {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -35,8 +36,8 @@ export class LLMRepository {
         Authorization: `Bearer ${this.apiKeys.openai}`,
       },
       body: JSON.stringify({
-        model: "gpt-4-turbo",
-        messages: messages,
+        model,
+        messages,
         response_format: { type: format },
       }),
     });
