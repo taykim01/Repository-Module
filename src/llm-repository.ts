@@ -79,11 +79,11 @@ export class LLMRepository {
         response_format: options.response_format ?? null,
       }),
     };
-    const res = await fetch(
-      "https://api.perplexity.ai/chat/completions",
-      payload
-    );
-    return res;
+    return payload;
+    // const res = await fetch(
+    //   "https://api.perplexity.ai/chat/completions",
+    //   payload
+    // );
     // const data = await res.json();
     // const citations = data.citations;
     // const message = data.choices[0].message.content;
