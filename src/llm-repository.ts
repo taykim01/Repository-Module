@@ -90,27 +90,4 @@ export class LLMRepository {
 
     // return { message, citations };
   }
-
-  async generateEmbedding(input: string): Promise<number[]> {
-    const res = await fetch("https://api.openai.com/v1/embeddings", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${this.apiKeys.openai}`,
-      },
-      body: JSON.stringify({
-        model: "text-embedding-3-large",
-        input: input,
-        encoding_format: "float",
-      }),
-    });
-
-    if (!res.ok) {
-      throw new Error(`OpenAI API error: ${res.statusText}`);
-    }
-
-    const data = await res.json();
-    const vector: number[] = data.data[0].embedding;
-    return vector;
-  }
 }
