@@ -85,9 +85,6 @@ export class LLMRepository {
     );
     const data = await res.json();
     return data;
-    const citations = data.citations;
-    const message = data.choices[0].message.content;
-    return { message, citations };
   }
 
   async generateEmbedding(input: string): Promise<number[]> {
