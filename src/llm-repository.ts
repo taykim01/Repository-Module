@@ -53,12 +53,12 @@ export class LLMRepository {
     return response;
   }
 
-  async generateSearchResponse(
+  async generateQueryResults(
     messages: LLMOptions[],
     model: string,
     maxTokens: number
-  ): Promise<{ message: string; citations: string[] }> {
-    const payload = {
+  ): Promise<string> {
+    const res = await fetch("https://api.perplexity.ai/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${this.apiKeys.perplexity}`,
@@ -69,16 +69,10 @@ export class LLMRepository {
         messages,
         max_tokens: maxTokens,
       }),
-    };
-    const res = await fetch(
-      "https://api.perplexity.ai/chat/completions",
-      payload
-    );
+    });
     const data = await res.json();
 
-    const citations = data.citations ?? [];
-    const message = data.choices[0].message.content;
-    return { message, citations };
+    return data.choices[0].message.content;
   }
 
   async generateEmbedding(input: string): Promise<number[]> {
