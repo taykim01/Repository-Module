@@ -1,12 +1,8 @@
-export interface LLMOptions {
-  role: "system" | "user" | "assistant";
-  content: string;
-  name?: string;
-}
+import { ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs";
 
 export interface PerplexityOptions {
   model: string;
-  messages: LLMOptions[];
+  messages: ChatCompletionMessageParam[];
   max_tokens?: number;
   temperature?: number;
   top_p?: number;
@@ -25,7 +21,7 @@ export class LLMRepository {
   constructor(public apiKeys: { openai?: string; perplexity?: string }) {}
 
   async generateQueryResults(
-    messages: LLMOptions[],
+    messages: ChatCompletionMessageParam[],
     model: string,
     maxTokens: number
   ): Promise<{ message: string; citations: string[] }> {
@@ -49,7 +45,7 @@ export class LLMRepository {
   }
 
   async generateResponse(
-    messages: LLMOptions[],
+    messages: ChatCompletionMessageParam[],
     format: "json_object" | "text",
     model: string
   ): Promise<string> {
